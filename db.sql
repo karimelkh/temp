@@ -213,7 +213,6 @@ from
 -------------
 CREATE VIEW COM_COMPLETE (NCom, NCli, NOMCli, Loc, DateCom) AS
 SELECT
-SELECT
   NCom,
   Com.NCli,
   NOM,
@@ -225,35 +224,11 @@ FROM
 WHERE
   Com.NCli = Cli.NCli;
 
-SELECT
-  NCom,
-  NOMCli
-FROM
-  COM_COMPLETE
-WHERE
-  Loc = 'Agadir';
 
-SELECT
-  NCom,
-  NOMCli
-FROM
-  COM_COMPLETE
-WHERE
-  NCli = 'C400';
+-- qst 1
+select ncli, nomcli, loc, COUNT(loc) from COM_COMPLETE
+group by ncli, nomcli, loc;
 
-SELECT
-  *
-FROM
-  COM_COMPLETE;
-
-select
-  *
-from
-  commande;
-
-----------
--- EX 1	--
-----------
 CREATE VIEW Habitude_Achat (Localite, NProd, Volume) AS
 SELECT
   Localite,
@@ -272,3 +247,25 @@ SELECT
   *
 FROM
   Habitude_Achat;
+
+create view Val_Stock_Actu(Stock, Valeur)
+as select P.NProd, (QStock-SUM(D.QCom))*Prix
+from Detail D, Produit P
+group by P.NProd;
+
+SELECT
+  SUM(Valeur)
+FROM
+  Val_Stock_Actu;
+
+-- drop view Cli;
+
+create view Cli(NCli, Nom, Adresse, Localite, Cat, Compte) as
+select NCli, Nom, Adresse, Localite, Cat, Compte
+from Client
+where Cat is null or Cat in ('B1', 'B2', 'C1', 'C2')
+with check option;
+
+
+
+
